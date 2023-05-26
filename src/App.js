@@ -1,5 +1,5 @@
 import './App.css';
-import SubmitPoo from "./features/SumbitPoo";
+import SubmitPoo from './features/SumbitPoo';
 
 function App() {
     return (

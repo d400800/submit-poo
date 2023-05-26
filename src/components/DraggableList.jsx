@@ -1,8 +1,11 @@
 import React from 'react';
+
 import {DragDropContext, Draggable} from 'react-beautiful-dnd';
+import {create} from 'zustand';
+
+import {List, ListItem, ListItemButton, ListItemText} from '@mui/material';
+
 import {StrictModeDroppable as Droppable} from './StrictModeDroppable';
-import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
-import {create} from "zustand";
 
 const DraggableList = ({initialItems, onChange, fieldName}) => {
     const useDraggableListStore = create((set) => ({
@@ -13,17 +16,18 @@ const DraggableList = ({initialItems, onChange, fieldName}) => {
             set((state) => {
                 const updatedItems = [...state.items];
                 const [removed] = updatedItems.splice(result.source.index, 1);
+
                 updatedItems.splice(result.destination.index, 0, removed);
 
                 // Notify the parent component about the updated items
                 onChange(updatedItems, fieldName);
 
-                return { items: updatedItems };
+                return {items: updatedItems};
             });
-        },
+        }
     }));
 
-    const { items, onItemDragEnd } = useDraggableListStore();
+    const {items, onItemDragEnd} = useDraggableListStore();
 
     return (
         <DragDropContext onDragEnd={onItemDragEnd}>
@@ -37,7 +41,7 @@ const DraggableList = ({initialItems, onChange, fieldName}) => {
                                         divider
                                         dense
                                         sx={{
-                                            backgroundColor: `${item.isCorrect ? 'success.light' : 'transparent'}`,
+                                            backgroundColor: `${item.isCorrect ? 'success.light' : 'transparent'}`
                                         }}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}

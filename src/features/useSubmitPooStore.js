@@ -1,26 +1,23 @@
-import { create } from 'zustand'
-import {data} from "../data";
-import _ from "lodash";
-import {shuffleArray} from "../utils";
+import _ from 'lodash';
+import {create} from 'zustand';
 
-const dataIndexed = data.map(([w1, w2], i) => {
-    return [
-        {id: i.toString(), content: w1, answer: w2},
-        {id: i.toString(), content: w2, answer: w1},
-    ];
-});
+import {data} from '../data';
+import {shuffleArray} from '../utils';
+
+const dataIndexed = data.map(([w1, w2], i) => [
+    {id: i.toString(), content: w1, answer: w2},
+    {id: i.toString(), content: w2, answer: w1}
+]);
 
 const [w1, w2] = _.unzip(dataIndexed);
 
-const shuffledWords = {w1: shuffleArray(w1), w2: shuffleArray(w2)}
+const shuffledWords = {w1: shuffleArray(w1), w2: shuffleArray(w2)};
 
 const w1Answers = _.groupBy(shuffledWords.w1, 'content');
 
 export const useSubmitPooStore = create((set) => ({
     words: shuffledWords,
-    onChange: (updatedItems, key) => set((state) => {
-        return {words: {...state.words, [key]: updatedItems}};
-    }),
+    onChange: (updatedItems, key) => set((state) => ({words: {...state.words, [key]: updatedItems}})),
     verifyResult: () => set(state => {
         const zipped = _.zip([...state.words.w1], [...state.words.w2]);
 
