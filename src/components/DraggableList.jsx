@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import React from 'react';
+import {DragDropContext, Draggable} from 'react-beautiful-dnd';
 import {StrictModeDroppable as Droppable} from './StrictModeDroppable';
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import {create} from "zustand";
 
 const DraggableList = ({initialItems, onChange, fieldName}) => {
-    const [items, setItems] = useState(initialItems);
+    const useDraggableListStore = create((set) => ({
+        items: initialItems,
+        onItemDragEnd: (result) => {
+            if (!result.destination) return;
 
-    useEffect(() => {
-        setItems(initialItems);
-    }, [initialItems]);
+            set((state) => {
+                const updatedItems = [...state.items];
+                const [removed] = updatedItems.splice(result.source.index, 1);
+                updatedItems.splice(result.destination.index, 0, removed);
 
-    const handleDragEnd = (result) => {
-        if (!result.destination) return;
+                // Notify the parent component about the updated items
+                onChange(updatedItems, fieldName);
 
-        const updatedItems = [...items];
-        const [removed] = updatedItems.splice(result.source.index, 1);
-        updatedItems.splice(result.destination.index, 0, removed);
+                return { items: updatedItems };
+            });
+        },
+    }));
 
-        setItems(updatedItems);
-
-        onChange(updatedItems, fieldName);
-    };
+    const { items, onItemDragEnd } = useDraggableListStore();
 
     return (
-        <DragDropContext onDragEnd={handleDragEnd}>
+        <DragDropContext onDragEnd={onItemDragEnd}>
             <Droppable droppableId="draggable-list">
                 {(provided) => (
                     <List {...provided.droppableProps} ref={provided.innerRef}>
