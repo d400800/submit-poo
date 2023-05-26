@@ -34,7 +34,7 @@ const DraggableList = ({initialItems, onChange, fieldName}) => {
                                         divider
                                         dense
                                         sx={{
-                                            bgcolor: `${item.isCorrect ? '#a2cf6e' : 'transparent'}`,
+                                            backgroundColor: `${item.isCorrect ? 'success.light' : 'transparent'}`,
                                         }}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
