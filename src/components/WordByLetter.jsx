@@ -1,7 +1,7 @@
 import {Box} from '@mui/material';
 
 export default function WordByLetter({word, searchTerm}) {
-    const startIndex = word.indexOf(searchTerm);
+    const startIndex = word.indexOf(searchTerm.toLowerCase());
     const endIndex = startIndex + searchTerm.length;
 
     const letters = word
