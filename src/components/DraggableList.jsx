@@ -6,8 +6,9 @@ import {create} from 'zustand';
 import {List, ListItem, ListItemButton, ListItemText} from '@mui/material';
 
 import {StrictModeDroppable as Droppable} from './StrictModeDroppable';
+import WordByLetter from './WordByLetter';
 
-const DraggableList = ({initialItems, onChange, fieldName}) => {
+const DraggableList = ({initialItems, onChange, fieldName, searchTerm}) => {
     const useDraggableListStore = create((set) => ({
         items: initialItems,
         onItemDragEnd: (result) => {
@@ -48,7 +49,12 @@ const DraggableList = ({initialItems, onChange, fieldName}) => {
                                         ref={provided.innerRef}
                                     >
                                         <ListItemButton>
-                                            <ListItemText primary={item.content}/>
+                                            <ListItemText>
+                                                <WordByLetter
+                                                    word={item.content}
+                                                    searchTerm={searchTerm}
+                                                />
+                                            </ListItemText>
                                         </ListItemButton>
                                     </ListItem >
                                 )}
